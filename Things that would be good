@@ -1,0 +1,19 @@
+Things that would be good
+
+- Space stations & artificial satellites
+- Glowing blurry galaxy background
+- Refactor StarAppearance & Planet components which awkwardly defined are
+X Many levels, needs level manager & entity deletion
+X Portals
+X Breaking into pieces
+
+
+
+
+Things already done
+
+- Thrust animation
+- Spaceports
+- Collision detection
+- Atmosphere for sun & planets
+- Health system, display fuel & health
