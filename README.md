@@ -3,7 +3,7 @@ grav
 
 Fire up your rocket ship, swing it around stars and land on other planets. Real 2d physics almost included.
 
-Play here: [http://contland.net23.net/grav/](http://contland.net23.net/grav/)
+Play here: [http://zhaop.me/grav/](http://zhaop.me/grav/)
 
 *Feel free to fork this project and try things on it.*
 
