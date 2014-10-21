@@ -1,12 +1,30 @@
 (function () {
 
 	// Helper functions
+
+	// Convert int to [red, green, blue]
 	var intToRgb = function (color) {
 		return [
 			(color & 0xff0000) >> 16,
 			(color & 0x00ff00) >> 8,
 			color & 0x0000ff,
-		].join(',');
+		];
+	};
+
+	// Convert [red, green, blue] to int
+	var rgbToInt = function (rgb) {
+		return (rgb[0] << 16) + (rgb[1] << 8) + rgb[2];
+	};
+
+	// Interpolate from color1 to color2, with 0 <= t <= 1
+	var interpolateColor = function (color1, color2, t) {
+		var c1 = intToRgb(color1);
+		var c2 = intToRgb(color2);
+		return rgbToInt([
+			c1[0]*(1-t) + c2[0]*t,
+			c1[1]*(1-t) + c2[1]*t,
+			c1[2]*(1-t) + c2[2]*t
+		]);
 	};
 
 	// Entity: give identity to data
@@ -130,15 +148,10 @@
 		this.max = 100;
 
 		this.graphics = null;	// null when not added to scene
-		this.fraction = function(){
-			return this.value/this.max;
-		};
-		this.color = function(){
-			var fraction = this.fraction();
-			var red = (fraction < 0.5) ? 255 : Math.floor(255*2*(1-fraction));
-			var green = (fraction > 0.5) ? 255 : Math.floor(255*fraction*2);
-			return red*65536 + green*256;
-		};
+		this.color2 = 0x3da100;	// Healthy
+		this.color1 = 0xffff00; // Warning
+		this.color0 = 0xeb0000;	// Danger
+		
 		this.height = 15;
 		this.bottom = 0;
 	};
@@ -653,12 +666,15 @@
 					stage.addChild(health.graphics);
 				}
 
+				var fraction = health.value/health.max;
+				var color = fraction < 0.5 ? interpolateColor(health.color0, health.color1, fraction*2) : interpolateColor(health.color1, health.color2, fraction*2-1);
+
 				var graphics = health.graphics;
 				graphics.x = 0;
 				graphics.y = window.innerHeight - health.bottom;
 				graphics.clear();
-				graphics.beginFill(health.color());
-				graphics.drawRect(0, -health.height, window.innerWidth * health.fraction(), health.height);
+				graphics.beginFill(color);
+				graphics.drawRect(0, -health.height, window.innerWidth * fraction, health.height);
 				graphics.endFill();
 			}
 
@@ -721,7 +737,7 @@
 					var color = atmosphere.color ? atmosphere.color : star.color;
 
 					var totalRadius = star.radius + atmosphere.height;
-					var rgb = intToRgb(color);
+					var rgb = intToRgb(color).join(',');
 
 					atmosphere.canvas = document.createElement("canvas");
 					atmosphere.canvas.width = totalRadius*2;
@@ -738,7 +754,7 @@
 
 					ctx.beginPath();
 					ctx.arc(totalRadius, totalRadius, star.radius, 0, 2*Math.PI, false);
-					ctx.fillStyle = "rgb(" + intToRgb(star.color) + ")";
+					ctx.fillStyle = "rgb(" + intToRgb(star.color).join(',') + ")";
 					ctx.fill();
 					ctx.closePath();
 
