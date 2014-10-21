@@ -820,9 +820,9 @@
 	var constants, entities, systems, stage, mouse, key, stats, time = 0, running = true;
 
 	// Init code
-	var init = document.onreadystatechange = function () {
+	var init = function () {
 
-		if (document.readyState != "interactive") return;
+		//if (document.readyState != "interactive") return;
 
 		// Prepare systems in the right order
 		systems = [
@@ -1002,6 +1002,8 @@
 
 		// loop();
 	};
+
+	$(document).ready(init);
 
 	window.go = function () {
 		document.getElementById('intro').style.display = 'none';
