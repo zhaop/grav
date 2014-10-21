@@ -130,9 +130,15 @@
 		this.max = 100;
 
 		this.graphics = null;	// null when not added to scene
-		this.color2 = 0x3da100;	// Healthy
-		this.color1 = 0xffff00;	// Warning
-		this.color0 = 0xeb0000;	// Danger
+		this.fraction = function(){
+			return this.value/this.max;
+		};
+		this.color = function(){
+			var fraction = this.fraction();
+			var red = (fraction < 0.5) ? 255 : Math.floor(255*2*(1-fraction));
+			var green = (fraction > 0.5) ? 255 : Math.floor(255*fraction*2);
+			return red*65536 + green*256;
+		};
 		this.height = 15;
 		this.bottom = 0;
 	};
@@ -647,22 +653,12 @@
 					stage.addChild(health.graphics);
 				}
 
-				// Find the color we want
-				var fraction = health.value / health.max;
-				if (fraction > 0.67) {
-					color = health.color2;
-				} else if (fraction > 0.33) {
-					color = health.color1;
-				} else {
-					color = health.color0;
-				}
-
 				var graphics = health.graphics;
 				graphics.x = 0;
 				graphics.y = window.innerHeight - health.bottom;
 				graphics.clear();
-				graphics.beginFill(color);
-				graphics.drawRect(0, -health.height, window.innerWidth * fraction, health.height);
+				graphics.beginFill(health.color());
+				graphics.drawRect(0, -health.height, window.innerWidth * health.fraction(), health.height);
 				graphics.endFill();
 			}
 
