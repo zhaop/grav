@@ -70,7 +70,13 @@
 		this.height = window.innerHeight;
 
 		this.targetMatter = null;	// Matter component the camera is tracking
-		this.renderer = new PIXI.autoDetectRenderer(this.width, this.height, null, null, true);
+
+		// Will probably remove this once IE11 WebGL gets faster
+		var isIE11 = !(window.ActiveXObject) && "ActiveXObject" in window;
+		this.renderer = (isIE11
+			 ? new PIXI.CanvasRenderer(this.width, this.height, null, null)
+			 : new PIXI.autoDetectRenderer(this.width, this.height, null, null, true)
+		);
 
 		this.stage = new PIXI.Stage(0x000000);
 		this.container = new PIXI.DisplayObjectContainer();
