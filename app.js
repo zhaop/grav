@@ -820,7 +820,7 @@
 	var constants, entities, systems, stage, mouse, key, stats, time = 0, running = true;
 
 	// Init code
-	var init = function () {
+	var init = window.onload = function () {
 
 		//if (document.readyState != "interactive") return;
 
@@ -1002,8 +1002,6 @@
 
 		// loop();
 	};
-
-	$(document).ready(init);
 
 	window.go = function () {
 		document.getElementById('intro').style.display = 'none';
