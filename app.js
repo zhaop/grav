@@ -297,7 +297,7 @@
 			matter.ay = 0;
 
 			// Rotate object to indicate where it's heading if required
-			if (matter.rotateToHeading) {
+			if (matter.rotateToHeading && matter.vx*matter.vx + matter.vy*matter.vy > 0.001) {
 				matter.rot += 0.1*(Math.atan2(matter.vy, matter.vx) - matter.rot);
 			}
 
