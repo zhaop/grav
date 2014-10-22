@@ -822,8 +822,6 @@
 	// Init code
 	var init = window.onload = function () {
 
-		//if (document.readyState != "interactive") return;
-
 		// Prepare systems in the right order
 		systems = [
 			Systems.playerInput,
